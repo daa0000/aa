@@ -1,0 +1,46 @@
+package com.daa;
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Item {
+    double weight;
+    double value;
+
+    public Item(double weight, double value) {
+        this.weight = weight;
+        this.value = value;
+    }
+}
+
+public class Knapsack {
+    public static double getMaxValue(Item[] items, double capacity) {
+        // Sort items by value per unit weight in descending order (greedy strategy)
+    	Arrays.sort(items, (item1, item2) -> Double.compare(item2.value / item2.weight, item1.value / item1.weight));
+
+        double totalValue = 0.0;
+
+        for (Item item : items) {
+            if (capacity <= 0) {
+                break;
+            }
+
+            double fraction = Math.min(1, capacity / item.weight);
+            totalValue += fraction * item.value;
+            capacity -= fraction * item.weight;
+        }
+
+        return totalValue;
+    }
+
+    public static void main(String[] args) {
+        Item[] items = {
+            new Item(10, 60),
+            new Item(20, 100),
+            new Item(30, 120),
+        };
+        double capacity = 50;
+
+        double maxValue = getMaxValue(items, capacity);
+        System.out.println("Maximum value that can be obtained = " + maxValue);
+    }
+}
